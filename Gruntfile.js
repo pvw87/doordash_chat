@@ -27,10 +27,7 @@ module.exports = function(grunt) {
       }
     }
   });
-
-  grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks('grunt-contrib-watch');
+  
   grunt.loadNpmTasks('grunt-contrib-requirejs');
-
   grunt.registerTask('default', ['requirejs:mainJS', 'requirejs:mainCSS']);
 };

@@ -1,6 +1,9 @@
-define(["jquery", "backbone", "models/Model", "views/View", "collections/Collection"],
-
-    function($, Backbone, Model, View, Collection) {
+define([
+    "jquery",
+    "backbone",
+    "views/LoginView",
+    "views/ChatDashboardView"
+], function($, Backbone, LoginView, ChatDashboardView) {
 
         var Router = Backbone.Router.extend({
 
@@ -9,11 +12,29 @@ define(["jquery", "backbone", "models/Model", "views/View", "collections/Collect
             },
 
             routes: {
-                "": "index"
+                "dashboard": "renderChatDashboard",
+                "*actions": "renderLoginView"
             },
 
-            index: function() {
-                new View();
+            cleanup_views : function(){
+                if (this.previousView){
+                    this.previousView.close();
+                    this.previousView = null;
+                }
+            },
+
+            renderLoginView: function() {
+                var loginView = new LoginView();
+                loginView.render();
+                this.cleanup_views();
+                this.previousView = loginView;
+            },
+
+            renderChatDashboard: function() {
+                var chatDashboardView = new ChatDashboardView();
+                chatDashboardView.render();
+                this.cleanup_views();
+                this.previousView = chatDashboardView;
             }
 
         });
