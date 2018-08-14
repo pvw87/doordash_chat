@@ -1,9 +1,10 @@
 define([
     "jquery",
     "backbone",
+    "globals",
     "views/LoginView",
     "views/ChatDashboardView"
-], function($, Backbone, LoginView, ChatDashboardView) {
+], function($, Backbone, Globals, LoginView, ChatDashboardView) {
 
         var Router = Backbone.Router.extend({
 
@@ -13,7 +14,7 @@ define([
 
             routes: {
                 "dashboard": "renderChatDashboard",
-                "*actions": "renderLoginView"
+                "": "renderLoginView"
             },
 
             cleanup_views : function(){
@@ -31,10 +32,14 @@ define([
             },
 
             renderChatDashboard: function() {
-                var chatDashboardView = new ChatDashboardView();
-                chatDashboardView.render();
-                this.cleanup_views();
-                this.previousView = chatDashboardView;
+                if (!_.has(Globals, "loggedInUser")) {
+                    Backbone.history.navigate("", true);
+                } else {
+                    var chatDashboardView = new ChatDashboardView();
+                    chatDashboardView.render();
+                    this.cleanup_views();
+                    this.previousView = chatDashboardView;
+                }
             }
 
         });

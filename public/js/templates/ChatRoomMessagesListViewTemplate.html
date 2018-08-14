@@ -1,0 +1,7 @@
+<div class="messages-list">
+	<%_.forEach(messages, function (message) {%>
+		<div>
+        	<span><%= message.message %></span> - <span><%= message.name %></span>
+        <div>
+	<% }); %>
+</div>

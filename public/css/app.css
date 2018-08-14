@@ -39,7 +39,7 @@ body {
 	bottom: 0px;
 	width: 400px;
 	display: block;
-	background: red;
+	background: #efeff0;
 }
 
 .chat-main-body {
@@ -48,5 +48,5 @@ body {
 	left: 400px;
 	bottom: 0px;
 	right: 0px;
-	background: blue;
+	background: #f3f3f3;
 }

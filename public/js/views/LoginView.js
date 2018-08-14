@@ -33,7 +33,11 @@ define([
 
         loginSuccess: function(event) {
             if (!this.$el.find(".-js-submit-user-name").hasClass("disabled")) {
-                Globals["loggedInUser"] = this.$el.find("input").val();
+                Globals["loggedInUser"] = {
+                    userName: this.$el.find("input").val(),
+                    loggedInTime: Date.now()
+                }
+
                 Backbone.history.navigate("dashboard", true);
             }
         },

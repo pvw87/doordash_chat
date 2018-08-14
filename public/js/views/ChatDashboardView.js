@@ -3,27 +3,41 @@ define([
     "underscore",
     "backbone",
     "globals",
-    "views/RoomListView",
+    "views/UserDetailsView",
+    "views/ChatRoomListView",
+    "views/ChatRoomDetailsView",
     "text!templates/ChatDashboardViewTemplate.html"
-], function($, _, Backbone, Globals, RoomListView, ChatDashboardViewTemplate){
+], function($, _, Backbone, Globals, UserDetailsView, ChatRoomListView, ChatRoomDetailsView, ChatDashboardViewTemplate){
 
     var ChatDashboardView = Backbone.View.extend({
         render_el : $("#app"),
         template:  _.template(ChatDashboardViewTemplate),
 
         render: function() {
-            if (!_.has(Globals, "loggedInUser")) {
-                Backbone.history.navigate("", true);
-            }
-            else {
-                this.$el.html(this.template(Globals));
-                this.render_el.html(this.$el);
-                var roomListView = new RoomListView();
-                roomListView.render();
-            }
+            this.$el.html(this.template());
+            this.render_el.html(this.$el);
+
+            this.userDetailsView = new UserDetailsView({
+                parent_el: this.$el.find(".-js-user-details")
+            });
+            this.userDetailsView.render();
+            
+            this.chatRoomListView = new ChatRoomListView({
+                parent_el: this.$el.find(".-js-chat-room-list-view")
+            });
+            this.chatRoomListView.render();
+            
+            this.chatRoomDetailsView = new ChatRoomDetailsView({
+                parent_el: this.$el.find('.-js-chat-main-body')
+            });
+            this.chatRoomDetailsView.render();
         },
 
         close : function(){
+            this.userDetailsView.close();
+            this.chatRoomListView.close();
+            this.chatRoomDetailsView.close();
+
             this.undelegateEvents();
             this.remove();
         }
