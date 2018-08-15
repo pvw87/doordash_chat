@@ -1,12 +1,12 @@
 define([
-    "jquery",
-    "underscore",
-    "backbone",
-    "globals",
-    "events",
-    "views/ChatRoomInfoView",
-    "views/ChatRoomMessagesListView",
-    "text!templates/ChatRoomDetailsViewTemplate.html"
+    'jquery',
+    'underscore',
+    'backbone',
+    'globals',
+    'events',
+    'views/ChatRoomInfoView',
+    'views/ChatRoomMessagesListView',
+    'text!templates/ChatRoomDetailsViewTemplate.html'
 ], function($, _, Backbone, Globals, Vents, ChatRoomInfoView, ChatRoomMessagesListView, 
      ChatRoomDetailsViewTemplate){
 
@@ -18,7 +18,7 @@ define([
         	this.parent_el = options.parent_el;
         	this.eventDispatcher = Vents;
 
-        	this.listenTo(this.eventDispatcher, "room:clicked", this.showChatDetails);
+        	this.listenTo(this.eventDispatcher, 'room:clicked', this.showChatDetails);
         },
 
         render: function() {
@@ -28,8 +28,8 @@ define([
 
         showChatDetails: function(options) {
         	var selectedRoomId = options.roomId;
-        	this.$el.find('.-js-welcome-message').addClass("hidden");
-            this.$el.find('.-js-chat-room-container').removeClass("hidden");
+        	this.$el.find('.-js-welcome-message').addClass('hidden');
+            this.$el.find('.-js-chat-room-container').removeClass('hidden');
 
         	this.chatRoomInfoView = new ChatRoomInfoView({
         		roomId: selectedRoomId,

@@ -4,11 +4,12 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 320px;
-	font-size: 32px;
 
 	input {
 		border-radius: 5px;
-		border: 1px solid #BCBBBC;
+		border: 0;
+		box-shadow: 0px 0px 2px inset #2a2c30;
+	    font-size: 16px;
 		width: 100%;
 		padding: 12px 16px;
 		color: #2a2c30;
@@ -24,6 +25,7 @@
 		background: #FF1A40;
 		color: white;
 		cursor: pointer;
+		font-size: 16px;
 		padding: 12px 16px;
 		text-align: center;
 		width: 100%;

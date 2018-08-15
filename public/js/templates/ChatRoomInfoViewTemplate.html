@@ -1,6 +1,5 @@
-<div class="room-name"><%= name %></div>
+<div class="room-name"><%= roomDetails.name %></div>
 <div class="room-users">
-	<%_.each(users, function (user) {%>
-        <span><%= user %></span>
-	<% }); %>
+    <span class="logged-in-users"><%= loggedInUser %>, </span>
+    <span><%= roomDetails.users %></span>
 </div>

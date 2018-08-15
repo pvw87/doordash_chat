@@ -1,11 +1,12 @@
 define([
-	"jquery",
-	"underscore",
-	"backbone",
-	"globals",
-	"models/ChatRoomModel",
-	"text!templates/ChatRoomInfoViewTemplate.html"
-], function($, _, Backbone, Globals, ChatRoomModel, ChatRoomInfoViewTemplate){
+	'jquery',
+	'underscore',
+	'backbone',
+	'globals',
+	'events',
+	'models/ChatRoomModel',
+	'text!templates/ChatRoomInfoViewTemplate.html'
+], function($, _, Backbone, Globals, Vents, ChatRoomModel, ChatRoomInfoViewTemplate){
 
 	var MatchesView = Backbone.View.extend({
 
@@ -14,9 +15,12 @@ define([
 		initialize: function(options) {
 			var that = this;
 			this.parent_el = options.parent_el;
+			this.eventDispatcher = Vents;
 			this.chatRoomModel = new ChatRoomModel({
-				id: options.roomId
+				roomId: options.roomId
 			});
+
+			this.listenTo(this.eventDispatcher, 'roomInfo:update', this.updateUserList);
 		},
 
 		render: function(collection){
@@ -24,13 +28,28 @@ define([
 			
 			this.chatRoomModel.fetch({
 				success: function(model, response, options){
-					that.$el.html(that.template(response))
+					var loggedInUser = Globals["loggedInUser"].userName;
+					var users = response.users;
+					var index = users.indexOf(loggedInUser);
+					users.splice(index, 1);					
+					response.users = users.join(', ');
+
+					that.$el.html(that.template({
+						roomDetails: response, 
+						loggedInUser: Globals["loggedInUser"].userName
+					}));
 					that.parent_el.html(that.$el);
 				},
 				error: function(response) {
-					console.log("Error");
+					console.log('Error');
 				}
 			});
+		},
+
+		updateUserList: function() {
+			if (!(_.has(this.chatRoomModel.get("users"), Globals["loggedInUser"].userName))) {
+				this.render();
+			}
 		},
 
 		close : function(){

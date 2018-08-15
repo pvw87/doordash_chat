@@ -1,17 +1,17 @@
 define([
-    "jquery",
-    "underscore",
-    "backbone",
-    "globals",
-    "views/UserDetailsView",
-    "views/ChatRoomListView",
-    "views/ChatRoomDetailsView",
-    "text!templates/ChatDashboardViewTemplate.html"
+    'jquery',
+    'underscore',
+    'backbone',
+    'globals',
+    'views/UserDetailsView',
+    'views/ChatRoomListView',
+    'views/ChatRoomDetailsView',
+    'text!templates/ChatDashboardViewTemplate.html'
 ], function($, _, Backbone, Globals, UserDetailsView, ChatRoomListView, ChatRoomDetailsView, ChatDashboardViewTemplate){
 
     var ChatDashboardView = Backbone.View.extend({
-        render_el : $("#app"),
-        className: "chat-container",
+        render_el : $('#app'),
+        className: 'chat-container',
         template:  _.template(ChatDashboardViewTemplate),
 
         render: function() {
@@ -19,12 +19,12 @@ define([
             this.render_el.html(this.$el);
 
             this.userDetailsView = new UserDetailsView({
-                parent_el: this.$el.find(".-js-user-details-container")
+                parent_el: this.$el.find('.-js-user-details-container')
             });
             this.userDetailsView.render();
             
             this.chatRoomListView = new ChatRoomListView({
-                parent_el: this.$el.find(".-js-chat-room-list-view")
+                parent_el: this.$el.find('.-js-chat-room-list-view')
             });
             this.chatRoomListView.render();
             

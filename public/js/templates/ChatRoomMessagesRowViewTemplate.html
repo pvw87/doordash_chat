@@ -1,3 +1,8 @@
-<div class="<% if (isLoggedInUser) { %> right <% } else { %> left <% } %>">
-	<span><%= message.message %></span> - <span><%= message.name %></span>
+<div class="messages-row-container <% if (isLoggedInUser) { %> right <% } else { %> left <% } %>">
+	<div class="messages-row">
+		<%= message.message %>
+	</div>
+	<% if (!isLoggedInUser) { %>
+		<div class="sent-by"><%= message.name %></div>
+	<% } %>
 </div>

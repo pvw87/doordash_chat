@@ -1,17 +1,19 @@
 define([
-	"jquery",
-	"underscore",
-	"backbone",
-	"globals",
-	"events",
-	"collections/ChatRoomCollection"
-], function($, _, Backbone, Globals, Vents, ChatRoomCollection){
+	'jquery',
+	'underscore',
+	'backbone',
+	'globals',
+	'events',
+	'collections/ChatRoomCollection',
+	'text!templates/ChatRoomListRowTemplate.html'
+], function($, _, Backbone, Globals, Vents, ChatRoomCollection, ChatRoomListRowTemplate){
 
 	var ChatRoomListView = Backbone.View.extend({
-		className: "chat-room-details-container",
+		className: 'chat-room-details-container',
+		rowTemplate: _.template(ChatRoomListRowTemplate),
 
 		events: {
-			"click .-js-chat-room": "renderChatDetails"
+			'click .-js-chat-room': 'renderChatDetails'
 		},
 
 		initialize: function(options) {
@@ -28,21 +30,21 @@ define([
 			this.chatRooms.fetch({
 				success: function(collection, response, options){
 					collection.each(function(model) {
-						that.$el.append("<div class='chat-room -js-chat-room' data-attr='" + model.get("id") + "'>" + model.get("name") + "</div>");
+						that.$el.append(that.rowTemplate(model.toJSON()));
 					});
 
 					that.parent_el.html(that.$el);
 				},
 				error: function(response) {
-					console.log("Error");
+					console.log('Error');
 				}
 			});
 		},
 
 		renderChatDetails: function(event) {
-			this.$el.find('.chat-room').removeClass("active");
-			$(event.target).addClass("active");
-			this.eventDispatcher.trigger("room:clicked", {roomId: $(event.target).attr('data-attr')});
+			this.$el.find('.chat-room').removeClass('active');
+			$(event.target).addClass('active');
+			this.eventDispatcher.trigger('room:clicked', {roomId: $(event.target).attr('data-attr')});
 		},
 
 		close : function(){

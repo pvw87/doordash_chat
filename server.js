@@ -2,9 +2,11 @@ var express    = require('express')
 var app        = express()
 var bodyParser = require('body-parser')
 var shortid = require('shortid')
+var path = require('path');
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, 'public')));
 
 var port = process.env.PORT || 8080
 
@@ -115,5 +117,8 @@ router.route('/rooms/:roomId/messages')
   })
 
 app.use('/api', router)
-app.listen(port)
-console.log(`API running at localhost:${port}/api`)
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname + '/index.html'));
+});
+app.listen(port);
+console.log(`Web server running at localhost:${port}`)

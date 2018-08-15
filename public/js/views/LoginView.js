@@ -1,18 +1,19 @@
 define([
-    "jquery",
-    "underscore",
-    "backbone",
-    "globals",
-    "text!templates/LoginViewTemplate.html"
+    'jquery',
+    'underscore',
+    'backbone',
+    'globals',
+    'text!templates/LoginViewTemplate.html'
 ], function($, _, Backbone, Globals, LoginViewTemplate){
 
     var LoginView = Backbone.View.extend({
-        render_el: $("#app"),
+        render_el: $('#app'),
+        className: 'login-view-container',
         template:  _.template(LoginViewTemplate),
 
         events: {
-            "keyup input": "enableSubmitButton",
-            "click .-js-submit-user-name": "loginSuccess"
+            'keyup input': 'enableSubmitButton',
+            'click .-js-submit-user-name': 'loginSuccess'
         },
 
         render: function() {
@@ -22,9 +23,9 @@ define([
 
         enableSubmitButton: function(event) {
             if (!$(event.target).val().length) {
-                this.$el.find(".-js-submit-user-name").addClass("disabled");
+                this.$el.find('.-js-submit-user-name').addClass('disabled');
             } else {
-                this.$el.find(".-js-submit-user-name").removeClass("disabled");
+                this.$el.find('.-js-submit-user-name').removeClass('disabled');
                 if (event.keyCode == 13){
                     this.loginSuccess();
                 }
@@ -32,13 +33,13 @@ define([
         },
 
         loginSuccess: function(event) {
-            if (!this.$el.find(".-js-submit-user-name").hasClass("disabled")) {
-                Globals["loggedInUser"] = {
-                    userName: this.$el.find("input").val(),
+            if (!this.$el.find('.-js-submit-user-name').hasClass('disabled')) {
+                Globals['loggedInUser'] = {
+                    userName: this.$el.find('input').val(),
                     loggedInTime: Date.now()
                 }
 
-                Backbone.history.navigate("dashboard", true);
+                Backbone.history.navigate('dashboard', true);
             }
         },
 

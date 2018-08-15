@@ -1,20 +1,20 @@
 define([
-    "jquery",
-    "underscore",
-    "backbone"
+    'jquery',
+    'underscore',
+    'backbone'
 ], function($, _, Backbone){
 
     var ChatMessageModel = Backbone.Model.extend({
         url : function(){
-			return 'http://localhost:8080/api/rooms' + this.urlParams + "/messages";
+			return '/api/rooms' + this.urlParams + '/messages';
 		},
 
 		initialize: function(options) {
-			this.urlParams = "";
+			this.urlParams = '';
 
 			var roomId = options.roomId;
 			if (roomId) {
-				this.urlParams += "/" + roomId;
+				this.urlParams += '/' + roomId;
 			}
 		}
     });

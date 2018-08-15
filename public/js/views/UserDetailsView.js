@@ -1,9 +1,9 @@
 define([
-    "jquery",
-    "underscore",
-    "backbone",
-    "globals",
-    "text!templates/UserDetailsViewTemplate.html"
+    'jquery',
+    'underscore',
+    'backbone',
+    'globals',
+    'text!templates/UserDetailsViewTemplate.html'
 ], function($, _, Backbone, Globals, UserDetailsViewTemplate){
 
     var LoginView = Backbone.View.extend({
@@ -23,7 +23,7 @@ define([
         updateOnlineTime: function() {
             var view = this;
 
-            var loggedInTime = Globals["loggedInUser"].loggedInTime;
+            var loggedInTime = Globals['loggedInUser'].loggedInTime;
             view.interval = setInterval(function() {
                 var currentTime = Date.now();
                 var onlineTime = Math.ceil((currentTime - loggedInTime) / 60000);

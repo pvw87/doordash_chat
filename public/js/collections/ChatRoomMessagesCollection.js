@@ -1,18 +1,18 @@
-define(["jquery","backbone","models/ChatMessageModel"],
+define(['jquery','backbone','models/ChatMessageModel'],
 
   function($, Backbone, ChatMessageModel) {
     var Collection = Backbone.Collection.extend({
       model: ChatMessageModel,
 		url : function(){
-			return 'http://localhost:8080/api/rooms' + this.urlParams + "/messages";
+			return '/api/rooms' + this.urlParams + '/messages';
 		},
 
 		initialize: function(options) {
-			this.urlParams = "";
+			this.urlParams = '';
 
-			var roomId = options.id;
+			var roomId = options.roomId;
 			if (roomId) {
-				this.urlParams += "/" + roomId;
+				this.urlParams += '/' + roomId;
 			}
 		}
     });
