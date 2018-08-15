@@ -36,14 +36,26 @@ define([
 			this.chatRoomMessages.fetch({
 				success: function(collection, response, options) {
 					collection.each(function(model) {
-						view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON()}));
-					})
+						var isLoggedInUser = false;
+						if (model.get("name") == Globals["loggedInUser"].userName) {
+							isLoggedInUser = true;
+						}
+						view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON(), isLoggedInUser: isLoggedInUser}));
+					});
 					view.parent_el.html(view.$el);
+					view.scrollToBottom();
 				},
 				error: function(response) {
 					console.log("Error");
 				}
 			});
+		},
+
+		scrollToBottom: function() {
+			var view = this;
+
+			var scrollHeight = view.$el.find('.-js-messages-list').prop('scrollHeight');
+			view.$el.find('.-js-messages-list').scrollTop(scrollHeight);
 		},
 
 		enableSendButton: function(event) {
@@ -65,9 +77,10 @@ define([
                 });
                 model.save().done(function() {
                 	view.chatRoomMessages.add(model);
-                	view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON()}));
+                	view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON(), isLoggedInUser: true}));
                 	view.$el.find("input").val('');
                 	view.enableSendButton();
+                	view.scrollToBottom();
                 });
                 
             }

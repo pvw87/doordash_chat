@@ -15144,7 +15144,7 @@ define('collections/ChatRoomMessagesCollection',["jquery","backbone","models/Cha
 define('text!templates/ChatRoomMessagesListViewTemplate.html',[],function () { return '<div class="messages-list -js-messages-list"></div>\n\n<div class="send-message-container">\n\t<input type="text" class="text-input -js-message" placeholder="Type your username..." autofocus/>\n\t<button class="btn -js-send-message disabled">Send</button>\n</div>';});
 
 
-define('text!templates/ChatRoomMessagesRowViewTemplate.html',[],function () { return '<div>\n\t<span><%= message.message %></span> - <span><%= message.name %></span>\n</div>';});
+define('text!templates/ChatRoomMessagesRowViewTemplate.html',[],function () { return '<div class="<% if (isLoggedInUser) { %> right <% } else { %> left <% } %>">\n\t<span><%= message.message %></span> - <span><%= message.name %></span>\n</div>';});
 
 define('views/ChatRoomMessagesListView',[
 	"jquery",
@@ -15184,14 +15184,26 @@ define('views/ChatRoomMessagesListView',[
 			this.chatRoomMessages.fetch({
 				success: function(collection, response, options) {
 					collection.each(function(model) {
-						view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON()}));
-					})
+						var isLoggedInUser = false;
+						if (model.get("name") == Globals["loggedInUser"].userName) {
+							isLoggedInUser = true;
+						}
+						view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON(), isLoggedInUser: isLoggedInUser}));
+					});
 					view.parent_el.html(view.$el);
+					view.scrollToBottom();
 				},
 				error: function(response) {
 					console.log("Error");
 				}
 			});
+		},
+
+		scrollToBottom: function() {
+			var view = this;
+
+			var scrollHeight = view.$el.find('.-js-messages-list').prop('scrollHeight');
+			view.$el.find('.-js-messages-list').scrollTop(scrollHeight);
 		},
 
 		enableSendButton: function(event) {
@@ -15213,9 +15225,10 @@ define('views/ChatRoomMessagesListView',[
                 });
                 model.save().done(function() {
                 	view.chatRoomMessages.add(model);
-                	view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON()}));
+                	view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON(), isLoggedInUser: true}));
                 	view.$el.find("input").val('');
                 	view.enableSendButton();
+                	view.scrollToBottom();
                 });
                 
             }
