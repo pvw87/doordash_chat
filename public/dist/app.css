@@ -1,5 +1,26 @@
-body {
-  background: grey;
+html, body {
+  width: 100%;
+  height: 100%;
+  background: white;
+  margin: 0;
+  font-family: "HelveticaNeue";
+}
+
+* {
+  outline: none;
+  box-sizing: border-box;
+}
+*:after, *:before {
+  box-sizing: border-box;
+}
+
+.app {
+  width: 100%;
+  height: 100%;
+}
+
+.hidden {
+  display: none;
 }
 
 .login-view-container {
@@ -7,41 +28,160 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
+  width: 320px;
+  font-size: 32px;
 }
 .login-view-container input {
+  border-radius: 5px;
+  border: 1px solid #BCBBBC;
   width: 100%;
-  height: 32px;
-  padding: 8px 12px;
+  padding: 12px 16px;
+  color: #2a2c30;
+  margin-bottom: 24px;
+}
+.login-view-container input::placeholder {
+  color: #BCBBBC;
 }
 .login-view-container button {
-  width: 100%;
-  height: 32px;
-  background: red;
+  border-radius: 5px;
+  background: #FF1A40;
   color: white;
+  cursor: pointer;
+  padding: 12px 16px;
+  text-align: center;
+  width: 100%;
 }
 .login-view-container button.disabled {
-  background: grey;
+  background: #939393;
+  cursor: default;
 }
 
 .chat-container {
   width: 100%;
   height: 100%;
+  position: relative;
+  font-size: 0;
 }
 .chat-container .chat-sidebar {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  bottom: 0px;
+  display: inline-block;
+  vertical-align: top;
   width: 400px;
-  display: block;
-  background: #efeff0;
+  height: 100%;
+  background: #FF1840;
+  color: white;
+  font-size: 16px;
+}
+.chat-container .chat-sidebar .user-details {
+  padding: 32px 24px;
+}
+.chat-container .chat-sidebar .user-details .username {
+  font-size: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 12px;
+}
+.chat-container .chat-sidebar .user-details .status {
+  font-size: 13px;
+}
+.chat-container .chat-sidebar .chat-room-list-view {
+  padding: 0;
+}
+.chat-container .chat-sidebar .chat-room-list-view .chat-room {
+  padding: 16px 24px;
+  cursor: pointer;
+}
+.chat-container .chat-sidebar .chat-room-list-view .chat-room:hover {
+  background: #791122;
+}
+.chat-container .chat-sidebar .chat-room-list-view .chat-room.active {
+  background: #791122;
 }
 .chat-container .chat-main-body {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 400px);
+  height: 100%;
+  background: #fff;
+}
+.chat-container .chat-main-body .chat-room-details-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.chat-container .chat-main-body .chat-room-details-container .welcome-message {
+  color: #2a2c30;
+  font-size: 24px;
+  font-style: italic;
+  width: 320px;
   position: absolute;
-  top: 0px;
-  left: 400px;
-  bottom: 0px;
-  right: 0px;
-  background: #939393;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-container {
+  width: 100%;
+  height: 100%;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-details {
+  height: 128px;
+  color: #2a2c30;
+  font-size: 16px;
+  text-align: center;
+  border-bottom: 2px solid #939393;
+  padding: 24px;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-details .room-name {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-messages-list-container {
+  height: calc(100% - 128px);
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-messages-list-container .chat-room-messages-list {
+  width: 100%;
+  height: 100%;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-messages-list-container .chat-room-messages-list .messages-list {
+  height: calc(100% - 100px);
+  color: #2a2c30;
+  overflow-y: auto;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-messages-list-container .chat-room-messages-list .messages-list > div {
+  font-size: 16px;
+  padding: 16px;
+  border: 1px solid;
+  max-width: 320px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-messages-list-container .chat-room-messages-list .send-message-container {
+  height: 100px;
+  padding: 24px;
+  border-top: 2px solid #939393;
+  font-size: 0;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-messages-list-container .chat-room-messages-list .send-message-container input {
+  width: calc(100% - 80px);
+  display: inline-block;
+  vertical-align: middle;
+  padding: 16px;
+  border-radius: 5px;
+  border: 1px solid #939393;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-messages-list-container .chat-room-messages-list .send-message-container button {
+  width: 80px;
+  text-align: right;
+  padding: 12px 8px;
+  color: #5DBCD2;
+  font-size: 20px;
+  background: none;
+  border: none;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.chat-container .chat-main-body .chat-room-details-container .chat-room-messages-list-container .chat-room-messages-list .send-message-container button:hover {
+  opacity: 0.9;
 }

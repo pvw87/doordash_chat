@@ -7,6 +7,7 @@ define([
 ], function($, _, Backbone, Globals, UserDetailsViewTemplate){
 
     var LoginView = Backbone.View.extend({
+        className: 'user-details',
         template:  _.template(UserDetailsViewTemplate),
 
         initialize: function(options) {

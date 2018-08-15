@@ -6,13 +6,12 @@ define([
     "events",
     "views/ChatRoomInfoView",
     "views/ChatRoomMessagesListView",
-    // "views/ChatRoomEnterMessageView",
     "text!templates/ChatRoomDetailsViewTemplate.html"
 ], function($, _, Backbone, Globals, Vents, ChatRoomInfoView, ChatRoomMessagesListView, 
-	// ChatRoomEnterMessageView, 
-	ChatRoomDetailsViewTemplate){
+     ChatRoomDetailsViewTemplate){
 
     var LoginView = Backbone.View.extend({
+        className: 'chat-room-details-container',
         template:  _.template(ChatRoomDetailsViewTemplate),
 
         initialize: function(options) {
@@ -29,7 +28,8 @@ define([
 
         showChatDetails: function(options) {
         	var selectedRoomId = options.roomId;
-        	this.$el.find('.-js-welcome-message').hide();
+        	this.$el.find('.-js-welcome-message').addClass("hidden");
+            this.$el.find('.-js-chat-room-container').removeClass("hidden");
 
         	this.chatRoomInfoView = new ChatRoomInfoView({
         		roomId: selectedRoomId,
@@ -39,21 +39,14 @@ define([
 
 			this.chatRoomMessagesListView = new ChatRoomMessagesListView({
 				roomId: selectedRoomId,
-            	parent_el: this.$el.find('.-js-chat-room-messages-list')
+            	parent_el: this.$el.find('.-js-chat-room-messages-list-container')
             });
 			this.chatRoomMessagesListView.render();
-
-			// this.chatRoomEnterMessageView = new ChatRoomEnterMessageView({
-			// 	roomId: selectedRoomId,
-   //          	parent_el: this.$el.find('.')
-   //          });
-   //          this.chatRoomEnterMessageView.render();
         },
 
         close : function(){
-        	this.this.chatRoomInfoView.close();
+        	this.chatRoomInfoView.close();
         	this.chatRoomMessagesListView.close();
-        	this.chatRoomEnterMessageView.close();
 
             this.undelegateEvents();
             this.remove();

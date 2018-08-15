@@ -14,14 +14,14 @@
   "author": "Ryan Gonzalez",
   "license": "ISC",
   "devDependencies": {
-    "body-parser": "~1.0.1",
-    "express": "~4.0.0",
-    "grunt": "~0.4.1",
-    "grunt-contrib-requirejs": "~0.4.0",
-    "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "serve": "^3.1.0",
-    "uglify-js": "~2.2.5"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "grunt": "^1.0.3",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-contrib-sass": "*",
+    "grunt-contrib-watch": "*",
+    "serve": "^9.6.0",
+    "uglify-js": "^3.4.7"
   },
   "dependencies": {
     "shortid": "^2.2.8"

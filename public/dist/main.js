@@ -1,4 +1,5 @@
-(function () {/**
+(function () {
+/**
  * @license almond 0.3.3 Copyright jQuery Foundation and other contributors.
  * Released under MIT license, http://github.com/requirejs/almond/LICENSE
  */
@@ -14827,7 +14828,7 @@ define('text',['module'], function (module) {
     return text;
 });
 
-define('text!templates/LoginViewTemplate.html',[],function () { return '<div class="login-view-container">\n\t<input type="text" class="text-input -js-username" placeholder="Type your username..." autofocus/>\n\t<button class="btn -js-submit-user-name disabled">Join the HOPELESS Chat!</button>\n</div>';});
+define('text!templates/LoginViewTemplate.html',[],function () { return '<div class="login-view-container">\n\t<input type="text" class="text-input -js-username" placeholder="Type your username..." autofocus/>\n\t<button class="btn -js-submit-user-name disabled">Join the DoorDash Chat!</button>\n</div>';});
 
 define('views/LoginView',[
     "jquery",
@@ -14882,7 +14883,7 @@ define('views/LoginView',[
     return LoginView;
 });
 
-define('text!templates/UserDetailsViewTemplate.html',[],function () { return '<div class=\'user-details\'>\n\t<h3><%= loggedInUser.userName %></h3>\n\t<p>Online for <span class="-js-online-time">1</span> minutes</p>\n</div>';});
+define('text!templates/UserDetailsViewTemplate.html',[],function () { return '<div class="username"><%= loggedInUser.userName %></div>\n<div class="status">Online for <span class="-js-online-time">1</span> minutes</div>';});
 
 define('views/UserDetailsView',[
     "jquery",
@@ -14893,6 +14894,7 @@ define('views/UserDetailsView',[
 ], function($, _, Backbone, Globals, UserDetailsViewTemplate){
 
     var LoginView = Backbone.View.extend({
+        className: 'user-details',
         template:  _.template(UserDetailsViewTemplate),
 
         initialize: function(options) {
@@ -14992,21 +14994,17 @@ define('collections/ChatRoomCollection',["jquery","backbone","models/ChatRoomMod
   }
 
 );
-
-define('text!templates/RoomListViewTemplate.html',[],function () { return '<div class="chat-room-details-container"></div>';});
-
 define('views/ChatRoomListView',[
 	"jquery",
 	"underscore",
 	"backbone",
 	"globals",
 	"events",
-	"collections/ChatRoomCollection",
-	"text!templates/RoomListViewTemplate.html"
-], function($, _, Backbone, Globals, Vents, ChatRoomCollection, RoomListViewTemplate){
+	"collections/ChatRoomCollection"
+], function($, _, Backbone, Globals, Vents, ChatRoomCollection){
 
-	var MatchesView = Backbone.View.extend({
-		template:  _.template(RoomListViewTemplate),
+	var ChatRoomListView = Backbone.View.extend({
+		className: "chat-room-details-container",
 
 		events: {
 			"click .-js-chat-room": "renderChatDetails"
@@ -15016,7 +15014,6 @@ define('views/ChatRoomListView',[
 			var that = this;
 			this.parent_el = options.parent_el;
 			this.eventDispatcher = Vents;
-			this.$el.html(this.template);
 
 			this.chatRooms = new ChatRoomCollection();
 		},
@@ -15027,7 +15024,7 @@ define('views/ChatRoomListView',[
 			this.chatRooms.fetch({
 				success: function(collection, response, options){
 					collection.each(function(model) {
-						that.$el.find('.chat-room-details-container').append("<div class='-js-chat-room' data-attr='" + model.get("id") + "'>" + model.get("name") + "</div>");
+						that.$el.append("<div class='chat-room -js-chat-room' data-attr='" + model.get("id") + "'>" + model.get("name") + "</div>");
 					});
 
 					that.parent_el.html(that.$el);
@@ -15039,6 +15036,8 @@ define('views/ChatRoomListView',[
 		},
 
 		renderChatDetails: function(event) {
+			this.$el.find('.chat-room').removeClass("active");
+			$(event.target).addClass("active");
 			this.eventDispatcher.trigger("room:clicked", {roomId: $(event.target).attr('data-attr')});
 		},
 
@@ -15048,7 +15047,7 @@ define('views/ChatRoomListView',[
 		}
 	});
 
-	return MatchesView;
+	return ChatRoomListView;
 });
 
 define('text!templates/ChatRoomInfoViewTemplate.html',[],function () { return '<div class="room-name"><%= name %></div>\n<div class="room-users">\n\t<%_.each(users, function (user) {%>\n        <span><%= user %></span>\n\t<% }); %>\n</div>';});
@@ -15096,11 +15095,34 @@ define('views/ChatRoomInfoView',[
 
 	return MatchesView;
 });
-define('collections/ChatRoomMessagesCollection',["jquery","backbone","models/ChatRoomModel"],
+define('models/ChatMessageModel',[
+    "jquery",
+    "underscore",
+    "backbone"
+], function($, _, Backbone){
 
-  function($, Backbone, ChatRoomModel) {
+    var ChatMessageModel = Backbone.Model.extend({
+        url : function(){
+			return 'http://localhost:8080/api/rooms' + this.urlParams + "/messages";
+		},
+
+		initialize: function(options) {
+			this.urlParams = "";
+
+			var roomId = options.roomId;
+			if (roomId) {
+				this.urlParams += "/" + roomId;
+			}
+		}
+    });
+
+    return ChatMessageModel;
+});
+define('collections/ChatRoomMessagesCollection',["jquery","backbone","models/ChatMessageModel"],
+
+  function($, Backbone, ChatMessageModel) {
     var Collection = Backbone.Collection.extend({
-      model: ChatRoomModel,
+      model: ChatMessageModel,
 		url : function(){
 			return 'http://localhost:8080/api/rooms' + this.urlParams + "/messages";
 		},
@@ -15112,15 +15134,17 @@ define('collections/ChatRoomMessagesCollection',["jquery","backbone","models/Cha
 			if (roomId) {
 				this.urlParams += "/" + roomId;
 			}
-		},
-
+		}
     });
     return Collection;
   }
 
 );
 
-define('text!templates/ChatRoomMessagesListViewTemplate.html',[],function () { return '<div class="messages-list">\n\t<%_.forEach(messages, function (message) {%>\n\t\t<div>\n        \t<span><%= message.message %></span> - <span><%= message.name %></span>\n        <div>\n\t<% }); %>\n</div>';});
+define('text!templates/ChatRoomMessagesListViewTemplate.html',[],function () { return '<div class="messages-list -js-messages-list"></div>\n\n<div class="send-message-container">\n\t<input type="text" class="text-input -js-message" placeholder="Type your username..." autofocus/>\n\t<button class="btn -js-send-message disabled">Send</button>\n</div>';});
+
+
+define('text!templates/ChatRoomMessagesRowViewTemplate.html',[],function () { return '<div>\n\t<span><%= message.message %></span> - <span><%= message.name %></span>\n</div>';});
 
 define('views/ChatRoomMessagesListView',[
 	"jquery",
@@ -15128,34 +15152,74 @@ define('views/ChatRoomMessagesListView',[
 	"backbone",
 	"globals",
 	"collections/ChatRoomMessagesCollection",
-	"text!templates/ChatRoomMessagesListViewTemplate.html"
-], function($, _, Backbone, Globals, ChatRoomMessagesCollection, ChatRoomMessagesListViewTemplate){
+	"models/ChatMessageModel",
+	"text!templates/ChatRoomMessagesListViewTemplate.html",
+	"text!templates/ChatRoomMessagesRowViewTemplate.html"
+], function($, _, Backbone, Globals, ChatRoomMessagesCollection, ChatMessageModel, ChatRoomMessagesListViewTemplate, ChatRoomMessagesRowViewTemplate){
 
 	var MatchesView = Backbone.View.extend({
-
+		className: 'chat-room-messages-list',
 		template:  _.template(ChatRoomMessagesListViewTemplate),
+		chatRowTemplate: _.template(ChatRoomMessagesRowViewTemplate),
+
+		events: {
+        	"keyup input": "enableSendButton",
+            "click .-js-send-message": "sendMessage"
+        },
 
 		initialize: function(options) {
-			var that = this;
+			var view = this;
 			this.parent_el = options.parent_el;
+			this.roomId = options.roomId;
 			this.chatRoomMessages = new ChatRoomMessagesCollection({
-				id: options.roomId
+				id: this.roomId
 			});
+
+			this.$el.html(this.template());
 		},
 
 		render: function(collection){
-			var that = this;
+			var view = this;
 			
 			this.chatRoomMessages.fetch({
-				success: function(collection, response, options){
-					that.$el.html(that.template({messages: response}))
-					that.parent_el.html(that.$el);
+				success: function(collection, response, options) {
+					collection.each(function(model) {
+						view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON()}));
+					})
+					view.parent_el.html(view.$el);
 				},
 				error: function(response) {
 					console.log("Error");
 				}
 			});
 		},
+
+		enableSendButton: function(event) {
+            if (!this.$el.find("input").val().length) {
+                this.$el.find(".-js-send-message").addClass("disabled");
+            } else {
+                this.$el.find(".-js-send-message").removeClass("disabled");
+            }
+        },
+
+        sendMessage: function() {
+        	var view = this;
+
+        	if (!this.$el.find(".-js-send-message").hasClass("disabled")) {
+        		var model = new ChatMessageModel({
+                	message: this.$el.find("input").val(),
+                	name: Globals["loggedInUser"].userName,
+                	roomId: this.roomId
+                });
+                model.save().done(function() {
+                	view.chatRoomMessages.add(model);
+                	view.$el.find('.-js-messages-list').append(view.chatRowTemplate({message: model.toJSON()}));
+                	view.$el.find("input").val('');
+                	view.enableSendButton();
+                });
+                
+            }
+        },
 
 		close : function(){
 			this.undelegateEvents();
@@ -15166,7 +15230,7 @@ define('views/ChatRoomMessagesListView',[
 	return MatchesView;
 });
 
-define('text!templates/ChatRoomDetailsViewTemplate.html',[],function () { return '<div class="chat-room-details-container">\n\t<div class="welcome-message -js-welcome-message">Chose a Chat Room to view details</div>\n\t<div class="chat-room-details -js-chat-room-details"></div>\n\t<div class="chat-room-messages-list -js-chat-room-messages-list"></div>\n\t<div class="chat-room-enter-message -js-chat-room-enter-message"></div>\n</div>';});
+define('text!templates/ChatRoomDetailsViewTemplate.html',[],function () { return '<div class="welcome-message -js-welcome-message">Select a chat room to start chatting...</div>\n<div class="chat-room-container -js-chat-room-container hidden">\n\t<div class="chat-room-details -js-chat-room-details"></div>\n\t<div class="chat-room-messages-list-container -js-chat-room-messages-list-container"></div>\n</div>';});
 
 define('views/ChatRoomDetailsView',[
     "jquery",
@@ -15176,13 +15240,12 @@ define('views/ChatRoomDetailsView',[
     "events",
     "views/ChatRoomInfoView",
     "views/ChatRoomMessagesListView",
-    // "views/ChatRoomEnterMessageView",
     "text!templates/ChatRoomDetailsViewTemplate.html"
 ], function($, _, Backbone, Globals, Vents, ChatRoomInfoView, ChatRoomMessagesListView, 
-	// ChatRoomEnterMessageView, 
-	ChatRoomDetailsViewTemplate){
+     ChatRoomDetailsViewTemplate){
 
     var LoginView = Backbone.View.extend({
+        className: 'chat-room-details-container',
         template:  _.template(ChatRoomDetailsViewTemplate),
 
         initialize: function(options) {
@@ -15199,7 +15262,8 @@ define('views/ChatRoomDetailsView',[
 
         showChatDetails: function(options) {
         	var selectedRoomId = options.roomId;
-        	this.$el.find('.-js-welcome-message').hide();
+        	this.$el.find('.-js-welcome-message').addClass("hidden");
+            this.$el.find('.-js-chat-room-container').removeClass("hidden");
 
         	this.chatRoomInfoView = new ChatRoomInfoView({
         		roomId: selectedRoomId,
@@ -15209,21 +15273,14 @@ define('views/ChatRoomDetailsView',[
 
 			this.chatRoomMessagesListView = new ChatRoomMessagesListView({
 				roomId: selectedRoomId,
-            	parent_el: this.$el.find('.-js-chat-room-messages-list')
+            	parent_el: this.$el.find('.-js-chat-room-messages-list-container')
             });
 			this.chatRoomMessagesListView.render();
-
-			// this.chatRoomEnterMessageView = new ChatRoomEnterMessageView({
-			// 	roomId: selectedRoomId,
-   //          	parent_el: this.$el.find('.')
-   //          });
-   //          this.chatRoomEnterMessageView.render();
         },
 
         close : function(){
-        	this.this.chatRoomInfoView.close();
+        	this.chatRoomInfoView.close();
         	this.chatRoomMessagesListView.close();
-        	this.chatRoomEnterMessageView.close();
 
             this.undelegateEvents();
             this.remove();
@@ -15233,7 +15290,7 @@ define('views/ChatRoomDetailsView',[
     return LoginView;
 });
 
-define('text!templates/ChatDashboardViewTemplate.html',[],function () { return '<div class="chat-container">\n\t<div class="chat-sidebar">\n\t\t<div class="user-details -js-user-details"></div>\n\t\t<div class="chat-room-list-view -js-chat-room-list-view"></div>\n\t</div>\n\t<div class="chat-main-body -js-chat-main-body"></div>\n</div>';});
+define('text!templates/ChatDashboardViewTemplate.html',[],function () { return '<div class="chat-sidebar">\n\t<div class="user-details-container -js-user-details-container"></div>\n\t<div class="chat-room-list-view -js-chat-room-list-view"></div>\n</div>\n<div class="chat-main-body -js-chat-main-body"></div>';});
 
 define('views/ChatDashboardView',[
     "jquery",
@@ -15248,6 +15305,7 @@ define('views/ChatDashboardView',[
 
     var ChatDashboardView = Backbone.View.extend({
         render_el : $("#app"),
+        className: "chat-container",
         template:  _.template(ChatDashboardViewTemplate),
 
         render: function() {
@@ -15255,7 +15313,7 @@ define('views/ChatDashboardView',[
             this.render_el.html(this.$el);
 
             this.userDetailsView = new UserDetailsView({
-                parent_el: this.$el.find(".-js-user-details")
+                parent_el: this.$el.find(".-js-user-details-container")
             });
             this.userDetailsView.render();
             

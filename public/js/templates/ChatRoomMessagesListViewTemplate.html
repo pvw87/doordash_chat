@@ -1,7 +1,6 @@
-<div class="messages-list">
-	<%_.forEach(messages, function (message) {%>
-		<div>
-        	<span><%= message.message %></span> - <span><%= message.name %></span>
-        <div>
-	<% }); %>
+<div class="messages-list -js-messages-list"></div>
+
+<div class="send-message-container">
+	<input type="text" class="text-input -js-message" placeholder="Type your username..." autofocus/>
+	<button class="btn -js-send-message disabled">Send</button>
 </div>

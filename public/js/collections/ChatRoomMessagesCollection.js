@@ -1,8 +1,8 @@
-define(["jquery","backbone","models/ChatRoomModel"],
+define(["jquery","backbone","models/ChatMessageModel"],
 
-  function($, Backbone, ChatRoomModel) {
+  function($, Backbone, ChatMessageModel) {
     var Collection = Backbone.Collection.extend({
-      model: ChatRoomModel,
+      model: ChatMessageModel,
 		url : function(){
 			return 'http://localhost:8080/api/rooms' + this.urlParams + "/messages";
 		},
@@ -14,8 +14,7 @@ define(["jquery","backbone","models/ChatRoomModel"],
 			if (roomId) {
 				this.urlParams += "/" + roomId;
 			}
-		},
-
+		}
     });
     return Collection;
   }

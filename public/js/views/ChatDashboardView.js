@@ -11,6 +11,7 @@ define([
 
     var ChatDashboardView = Backbone.View.extend({
         render_el : $("#app"),
+        className: "chat-container",
         template:  _.template(ChatDashboardViewTemplate),
 
         render: function() {
@@ -18,7 +19,7 @@ define([
             this.render_el.html(this.$el);
 
             this.userDetailsView = new UserDetailsView({
-                parent_el: this.$el.find(".-js-user-details")
+                parent_el: this.$el.find(".-js-user-details-container")
             });
             this.userDetailsView.render();
             
