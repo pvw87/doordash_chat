@@ -6,13 +6,13 @@ define([
     'events',
     'views/ChatRoomInfoView',
     'views/ChatRoomMessagesListView',
-    'text!templates/ChatRoomDetailsViewTemplate.html'
+    'text!templates/ChatRoomViewTemplate.html'
 ], function($, _, Backbone, Globals, Vents, ChatRoomInfoView, ChatRoomMessagesListView, 
-     ChatRoomDetailsViewTemplate){
+     ChatRoomViewTemplate){
 
-    var LoginView = Backbone.View.extend({
+    var ChatRoomView = Backbone.View.extend({
         className: 'chat-room-details-container',
-        template:  _.template(ChatRoomDetailsViewTemplate),
+        template:  _.template(ChatRoomViewTemplate),
 
         initialize: function(options) {
         	this.parent_el = options.parent_el;
@@ -53,5 +53,5 @@ define([
         }
     });
 
-    return LoginView;
+    return ChatRoomView;
 });

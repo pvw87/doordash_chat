@@ -3,7 +3,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     requirejs: {
-      mainJS: {
+      mainJSDev: {
         options: {
           baseUrl: "public/js/",
           paths: {
@@ -18,11 +18,26 @@ module.exports = function(grunt) {
           out: "public/dist/main.js"
         }
       },
-      mainCSS: {
+      mainJSProduction: {
+        options: {
+          baseUrl: "public/js/",
+          paths: {
+            "desktop": "main"
+          },
+          wrap: true,
+          name: "libs/almond",
+          preserveLicenseComments: false,
+          optimize: "uglify",
+          mainConfigFile: "public/js/main.js",
+          include: ["desktop"],
+          out: "public/dist/main.min.js"
+        }
+      },
+      mainCssProduction: {
         options: {
           optimizeCss: "standard",
-          cssIn: "./public/css/app.css",
-          out: "./public/app.min.css"
+          cssIn: "./public/dist/app.css",
+          out: "./public/dist/app.min.css"
         }
       }
     },
@@ -33,7 +48,7 @@ module.exports = function(grunt) {
           style: 'expanded'
         },
         files: {
-          'public/dist/app.css' : 'public/css/app.scss'
+          'public/dist/app.css' : 'public/scss/app.scss'
         }
       }
     },
@@ -44,7 +59,7 @@ module.exports = function(grunt) {
       },
       js: {
         files:['public/js/**'],
-        tasks:['requirejs:mainJS']
+        tasks:['requirejs:mainJSDev']
       }
     }
   });
@@ -52,5 +67,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default', ['requirejs:mainJS','sass', 'watch']);
+  grunt.registerTask('default', ['requirejs:mainJSDev', 'sass']);
+  grunt.registerTask('watch', ['watch']);
+  grunt.registerTask('production', ['requirejs:mainJSProduction', 'sass', 'requirejs:mainCssProduction']);
 };

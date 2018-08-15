@@ -11,7 +11,7 @@ define([
 ], function($, _, Backbone, Globals, Vents, ChatRoomMessagesCollection, ChatMessageModel,
 	ChatRoomMessagesListViewTemplate, ChatRoomMessagesRowViewTemplate){
 
-	var MatchesView = Backbone.View.extend({
+	var ChatRoomMessagesListView = Backbone.View.extend({
 		className: 'chat-room-messages-list',
 		template:  _.template(ChatRoomMessagesListViewTemplate),
 		chatRowTemplate: _.template(ChatRoomMessagesRowViewTemplate),
@@ -78,10 +78,11 @@ define([
 
         sendMessage: function() {
         	var view = this;
+        	var messageText = this.$el.find('input').val();
 
-        	if (!this.$el.find('.-js-send-message').hasClass('disabled')) {
+        	if (!this.$el.find('.-js-send-message').hasClass('disabled') && messageText.replace(/\s/g, '').length) {
         		var model = new ChatMessageModel({
-                	message: this.$el.find('input').val(),
+                	message: messageText,
                 	name: Globals['loggedInUser'].userName,
                 	roomId: this.roomId
                 });
@@ -105,5 +106,5 @@ define([
 		}
 	});
 
-	return MatchesView;
+	return ChatRoomMessagesListView;
 });

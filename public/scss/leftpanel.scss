@@ -1,0 +1,47 @@
+.chat-sidebar {
+	display: inline-block;
+	vertical-align: top;
+	width: 320px;
+	height: 100%;
+	background: #FF001A;
+	color: white;
+	font-size: 16px;
+
+	.user-details-container {
+		height: 130px;
+	}
+
+	.user-details {
+		padding: 32px 24px;
+
+		.username {
+			font-size: 32px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin-bottom: 12px;
+		}
+		.status {
+			font-size: 13px;
+		}
+	}
+
+	.chat-room-list-view {
+		max-height: calc(100% - 130px);
+		overflow-y: auto;
+		padding: 0;
+
+		.chat-room {
+			padding: 16px 24px;
+			cursor: pointer;
+
+			&:hover {
+				background: #8D0011;
+			}
+
+			&.active {
+				background: #8D0011;
+			}
+		}
+	}
+}

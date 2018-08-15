@@ -1,5 +1,7 @@
 <div class="room-name"><%= roomDetails.name %></div>
 <div class="room-users">
-    <span class="logged-in-users"><%= loggedInUser %>, </span>
+	<% if (loggedInUser !== undefined) { %>
+    	<span class="logged-in-users"><%= loggedInUser %></span>, 
+    <% } %>
     <span><%= roomDetails.users %></span>
 </div>

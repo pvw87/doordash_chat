@@ -8,7 +8,7 @@ define([
 	'text!templates/ChatRoomInfoViewTemplate.html'
 ], function($, _, Backbone, Globals, Vents, ChatRoomModel, ChatRoomInfoViewTemplate){
 
-	var MatchesView = Backbone.View.extend({
+	var ChatRoomInfoView = Backbone.View.extend({
 
 		template:  _.template(ChatRoomInfoViewTemplate),
 
@@ -31,12 +31,18 @@ define([
 					var loggedInUser = Globals["loggedInUser"].userName;
 					var users = response.users;
 					var index = users.indexOf(loggedInUser);
-					users.splice(index, 1);					
+
+					if (index > -1) {
+						users.splice(index, 1);
+					} else {
+						loggedInUser = undefined;
+					}
+					
 					response.users = users.join(', ');
 
 					that.$el.html(that.template({
-						roomDetails: response, 
-						loggedInUser: Globals["loggedInUser"].userName
+						roomDetails: response,
+						loggedInUser: loggedInUser
 					}));
 					that.parent_el.html(that.$el);
 				},
@@ -58,5 +64,5 @@ define([
 		}
 	});
 
-	return MatchesView;
+	return ChatRoomInfoView;
 });

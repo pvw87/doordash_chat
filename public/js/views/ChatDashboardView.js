@@ -5,9 +5,9 @@ define([
     'globals',
     'views/UserDetailsView',
     'views/ChatRoomListView',
-    'views/ChatRoomDetailsView',
+    'views/ChatRoomView',
     'text!templates/ChatDashboardViewTemplate.html'
-], function($, _, Backbone, Globals, UserDetailsView, ChatRoomListView, ChatRoomDetailsView, ChatDashboardViewTemplate){
+], function($, _, Backbone, Globals, UserDetailsView, ChatRoomListView, ChatRoomView, ChatDashboardViewTemplate){
 
     var ChatDashboardView = Backbone.View.extend({
         render_el : $('#app'),
@@ -28,16 +28,16 @@ define([
             });
             this.chatRoomListView.render();
             
-            this.chatRoomDetailsView = new ChatRoomDetailsView({
+            this.chatRoomView = new ChatRoomView({
                 parent_el: this.$el.find('.-js-chat-main-body')
             });
-            this.chatRoomDetailsView.render();
+            this.chatRoomView.render();
         },
 
         close : function(){
             this.userDetailsView.close();
             this.chatRoomListView.close();
-            this.chatRoomDetailsView.close();
+            this.chatRoomView.close();
 
             this.undelegateEvents();
             this.remove();

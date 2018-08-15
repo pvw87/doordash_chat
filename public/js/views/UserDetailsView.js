@@ -6,7 +6,7 @@ define([
     'text!templates/UserDetailsViewTemplate.html'
 ], function($, _, Backbone, Globals, UserDetailsViewTemplate){
 
-    var LoginView = Backbone.View.extend({
+    var UserDetailsView = Backbone.View.extend({
         className: 'user-details',
         template:  _.template(UserDetailsViewTemplate),
 
@@ -39,5 +39,5 @@ define([
         }
     });
 
-    return LoginView;
+    return UserDetailsView;
 });
