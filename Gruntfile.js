@@ -7,15 +7,15 @@ module.exports = function(grunt) {
         options: {
           baseUrl: "public/js/",
           paths: {
-            "desktop": "index"
+            "desktop": "main"
           },
           wrap: true,
           name: "libs/almond",
           preserveLicenseComments: false,
-          optimize: "uglify",
-          mainConfigFile: "public/js/index.js",
+          optimize: "none",
+          mainConfigFile: "public/js/main.js",
           include: ["desktop"],
-          out: "public/js/index.min.js"
+          out: "public/dist/main.js"
         }
       },
       mainCSS: {
@@ -25,9 +25,32 @@ module.exports = function(grunt) {
           out: "./public/app.min.css"
         }
       }
+    },
+    sass: {
+      dist: {
+        options: {
+          sourcemap: 'none',
+          style: 'expanded'
+        },
+        files: {
+          'public/dist/app.css' : 'public/css/app.scss'
+        }
+      }
+    },
+    watch: {
+      css: {
+        files: '**/*.scss',
+        tasks: ['sass']
+      },
+      js: {
+        files:['public/js/**'],
+        tasks:['requirejs:mainJS']
+      }
     }
   });
   
   grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.registerTask('default', ['requirejs:mainJS', 'requirejs:mainCSS']);
+  grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.registerTask('default', ['requirejs:mainJS','sass', 'watch']);
 };

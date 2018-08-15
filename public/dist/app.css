@@ -1,0 +1,47 @@
+body {
+  background: grey;
+}
+
+.login-view-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+}
+.login-view-container input {
+  width: 100%;
+  height: 32px;
+  padding: 8px 12px;
+}
+.login-view-container button {
+  width: 100%;
+  height: 32px;
+  background: red;
+  color: white;
+}
+.login-view-container button.disabled {
+  background: grey;
+}
+
+.chat-container {
+  width: 100%;
+  height: 100%;
+}
+.chat-container .chat-sidebar {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  width: 400px;
+  display: block;
+  background: #efeff0;
+}
+.chat-container .chat-main-body {
+  position: absolute;
+  top: 0px;
+  left: 400px;
+  bottom: 0px;
+  right: 0px;
+  background: #939393;
+}
